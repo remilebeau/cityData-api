@@ -81,20 +81,35 @@ def fetch_city_data(city: str, state: str):
             "WY": "Wyoming",
         }
         state = states.get(state)
+    # format state
     state = state.title().replace(" ", "-")
+
+    # send request
     url = f"https://www.city-data.com/city/{city}-{state}.html"
     response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
+
+    # get name
     name = soup.find("h1").text
+
+    # check value of name to validate response
     if name == "Oops, Page Not Found!":
         raise HTTPException(status_code=404, detail="City not found")
+
+    # get population and populationChange
     population = soup.find("section", class_="city-population").text.split(". ")[0]
     populationChange = soup.find("section", class_="city-population").text.split(". ")[
         1
     ]
+
+    # get medianIncome and medianHomeValue
     medianIncome = soup.find("section", class_="median-income").text.split("\n")[0]
     medianHomeValue = soup.find("section", class_="median-income").text.split("\n")[4]
+
+    # get nearestCities
     nearestCities = soup.find("section", class_="nearest-cities").text
+
+    # return data
     return {
         "name": name,
         "population": population,
