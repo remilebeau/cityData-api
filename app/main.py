@@ -2,10 +2,24 @@ import requests
 from bs4 import BeautifulSoup
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# cors
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+
+# @desc fetch city data
+# @route GET /api/citydata
+# @access public
 @app.get("/api/citydata")
 def fetch_city_data(city: str, state: str):
     # format city
