@@ -114,6 +114,14 @@ def fetch_city_data(city: str, state: str):
         .text
     )
 
+    # get education and commute
+    education_and_commute_elements = soup.find(
+        "section", class_="education-info"
+    ).find_all("li")
+    education_and_commute = []
+    for li in education_and_commute_elements:
+        education_and_commute.append(li.text)
+
     # get nearestCities
     nearestCities = soup.find("section", class_="nearest-cities").text
 
@@ -125,5 +133,6 @@ def fetch_city_data(city: str, state: str):
         "medianIncome": medianIncome,
         "medianHomeValue": medianHomeValue,
         "crimeRate": crimeRate,
+        "educationAndCommute": education_and_commute,
         "nearestCities": nearestCities,
     }
