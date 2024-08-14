@@ -36,6 +36,8 @@ def fetch_city_data(city: str, state: str):
             "CA": "California",
             "CO": "Colorado",
             "CT": "Connecticut",
+            "DC": "District of Columbia",
+            "D.C.": "District of Columbia",
             "DE": "Delaware",
             "FL": "Florida",
             "GA": "Georgia",
@@ -83,6 +85,9 @@ def fetch_city_data(city: str, state: str):
         state = states.get(state)
     # format state
     state = state.title().replace(" ", "-")
+    # special formatting for Washington, DC
+    if state == "District-Of-Columbia":
+        state = "District-of-Columbia"
 
     # send request
     url = f"https://www.city-data.com/city/{city}-{state}.html"
@@ -122,7 +127,9 @@ def fetch_city_data(city: str, state: str):
         education_and_commute.append(li.text)
 
     # get nearestCities
-    nearestCities = soup.find("section", class_="nearest-cities").text
+    nearestCities = soup.find("section", class_="nearest-cities").text.replace(
+        " )", ")"
+    )
 
     # return data
     return {
