@@ -106,13 +106,12 @@ def fetch_city_data(city: str, state: str):
     medianIncome = soup.find("section", class_="median-income").text.split("\n")[0]
     medianHomeValue = soup.find("section", class_="median-income").text.split("\n")[4]
 
-    # get crimeRate
-    crimeRate = (
-        soup.find("section", class_="crime")
-        .find("tr", class_="nosort")
-        .find_all("td")[-1]
-        .text
-    )
+    # get and validate crimeRate
+    crimeRate = soup.find("section", class_="crime")
+    if not crimeRate:
+        crimeRate = ""
+    else:
+        crimeRate = crimeRate.find("tr", class_="nosort").find_all("td")[-1].text
 
     # get education and commute
     education_and_commute_elements = soup.find(
