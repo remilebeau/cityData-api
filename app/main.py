@@ -106,6 +106,14 @@ def fetch_city_data(city: str, state: str):
     medianIncome = soup.find("section", class_="median-income").text.split("\n")[0]
     medianHomeValue = soup.find("section", class_="median-income").text.split("\n")[4]
 
+    # get crimeRate
+    crimeRate = (
+        soup.find("section", class_="crime")
+        .find("tr", class_="nosort")
+        .find_all("td")[-1]
+        .text
+    )
+
     # get nearestCities
     nearestCities = soup.find("section", class_="nearest-cities").text
 
@@ -116,5 +124,6 @@ def fetch_city_data(city: str, state: str):
         "populationChange": populationChange,
         "medianIncome": medianIncome,
         "medianHomeValue": medianHomeValue,
+        "crimeRate": crimeRate,
         "nearestCities": nearestCities,
     }
