@@ -1,13 +1,24 @@
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
+import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+# load .env file
+load_dotenv()
+
 # cors
-origins = ["*"]
+origins = []
+if os.getenv("PYTHON_ENV") == "development":
+    origins = ["http://localhost:3000"]
+else:
+    origins = [
+        "https://remilebeau-citydata.vercel.app",
+    ]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
